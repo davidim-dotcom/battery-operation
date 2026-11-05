@@ -693,28 +693,28 @@ const AREA={ko:{'東京':'도쿄','関西':'간사이','中部':'주부','東北
 const BT={
 ko:{tab:['가정용 축전지','계통용 BESS'],title:'계통용 BESS 입찰',desc:'2 MW / 8 MWh 계통용 축전지를 전날 입찰로 운용합니다. 실제 EPRX 수급조정시장 낙찰 실적(2026년 4~10월)으로 낙찰 여부가 갈립니다. 날짜는 결과가 나올 때까지 비공개입니다.',
  area:'에리어',start:'새 날 입찰 시작',
- how:['하루를 <b>3시간 블록 8개</b>로 나눠 용도를 정합니다: 1차 조정력, 3차①, 스포트 충전, 스포트 방전, 대기.','조정력은 <b>입찰가</b>를 고릅니다. 보수·중간·공격 = 과거 4주 같은 시간대 최고 낙찰가의 30·60·90% 분위입니다. <b>낸 가격 그대로 정산</b>(pay-as-bid)되므로 싸게 내면 붙어도 덜 벌고, 비싸게 내면 떨어집니다.','1차는 블록 시작 잔량이 <b>1~7 MWh</b> 안이어야 하고, 3차①은 <b>발동</b>되면 1~3시간 2 MW로 방전해야 합니다. 못 지키면 페널티입니다.','결과는 같은 과거 분포로 입찰한 <b>예보 AI</b>와 비교합니다.'],
+ how:['하루를 <b>3시간 블록 8개</b>로 나눠 용도를 정합니다: 1차 조정력, 3차①, 스포트 충전, 스포트 방전, 대기.','조정력은 <b>입찰가</b>를 고릅니다. 보수·중간·공격 = 과거 4주 기준 <b>낙찰 확률 90%·60%·30%</b>가 되는 가격입니다(상한이 바뀐 기간은 상한 대비 비율로 환산). <b>낸 가격 그대로 정산</b>(pay-as-bid)되므로 싸게 내면 붙어도 덜 벌고, 비싸게 내면 떨어집니다. 모집량 부족이 잦은 블록은 세 가격이 같아져 <b>상한가 입찰</b> 하나로 표시됩니다.','1차는 블록 시작 잔량이 <b>1~7 MWh</b> 안이어야 하고, 3차①은 <b>발동</b>되면 1~3시간 2 MW로 방전해야 합니다. 못 지키면 페널티입니다.','결과는 같은 과거 분포로 입찰한 <b>예보 AI</b>와 비교합니다.'],
  spec:[['설비','2 MW / 8 MWh'],['효율','충전 95% · 방전 95%'],['잔량','시작·종료 4 MWh'],['상한가','4~8월 15円, 9월~ 10円 /ΔkW·30분 (3차①은 가정값)'],['데이터','EPRX 실적 · 스포트는 모델']],
  hdr:(a,s)=>`D-1 입찰 · ${a} 에리어 · ${s} · 날짜 비공개`,season:{spring:'봄',summer:'여름',autumn:'가을'},
  opt:{p1:'1차 조정력',t1:'3차①',chg:'스포트 충전',dis:'스포트 방전',idle:'대기'},st:['보수','중간','공격'],
  pk:'피크 차익',anc:'조정력 중심',clr:'초기화',submit:'입찰 확정',exp:v=>`기대 수익 ${v}`,lobby:'로비로',
- axSpot:'스포트 円/kWh (모델)',axAnc:'최고 낙찰가 분포 円/ΔkW·30분 (과거 4주, 10~90%)',axSoc:'잔량 MWh',
+ axSpot:'스포트 円/kWh (모델)',axAnc:'최고 낙찰가 분포 円/ΔkW·30분 (부족 제외·상한 환산) · %=부족 확률',capBid:(v,p)=>`상한가 ${v}円 · 부족 ${p}%`,pw:p=>`${p}%`,axSoc:'잔량 MWh',
  won:(w,v)=>`낙찰 ${w}/6 · ${v}`,lost:'탈락',chg:(e,v)=>`충전 ${e} MWh · ${v}`,dis:(e,v)=>`방전 ${e} MWh · ${v}`,act:h=>`발동 ${h}h ✓`,actFail:'발동 미달 ✕',band:'잔량 범위 이탈 ✕',idle:'대기',
  res:{title:'입찰 정산',mis:'미션',end:'종료 잔량 보충',reveal:(d,a)=>`이 날은 ${d} · ${a} 에리어였습니다`,item:'항목',me:'나',mpc:'예보 AI',ai:'완벽 AI',p1:'1차 ΔkW',t1:'3차① ΔkW',kwh:'3차 발동 kWh',spot:'스포트 차익',pen:'페널티',tot:'합계',
   eff:'예보 AI 대비',m1:'페널티 0',m2:'예보 AI의 90% 이상',m3:'입찰한 코마 낙찰률 70% 이상',again:'같은 날 다시',next:'새 날',lobby:'로비',lesson:'해설',plan:'블록 배치',
-  L:{pen:'약속을 못 지켰습니다. 조정력에 낙찰되면 그 시간에는 약속한 출력을 낼 잔량이 있어야 합니다. 3차①을 연속으로 내기 전에는 충전 블록을, 1차 전에는 잔량을 1~7 MWh 안으로 맞춰 두세요.',lostAgg:n=>`공격 입찰 ${n}블록이 대부분 탈락했습니다. 과거 분포에서 상단(90%)은 붙을 확률이 낮습니다. 낙찰 확률 × 가격이 가장 큰 지점을 찾는 것이 핵심입니다.`,short:'이 에리어는 1차 모집량이 부족한 코마가 많아 상한 가까이 내도 낙찰되는 날이 많습니다. 보수 입찰은 그만큼 단가를 버린 셈입니다.',gen:'스포트 차익과 조정력은 같은 용량을 두고 경쟁합니다. 블록마다 「조정력 기대 수입」과 「충방전 가격 차」를 비교해 더 큰 쪽에 쓰는 것이 기본입니다.'}}},
+  L:{pen:'약속을 못 지켰습니다. 조정력에 낙찰되면 그 시간에는 약속한 출력을 낼 잔량이 있어야 합니다. 3차①을 연속으로 내기 전에는 충전 블록을, 1차 전에는 잔량을 1~7 MWh 안으로 맞춰 두세요.',lostAgg:n=>`공격 입찰 ${n}블록이 대부분 탈락했습니다. 과거 분포에서 상단(90%)은 붙을 확률이 낮습니다. 낙찰 확률 × 가격이 가장 큰 지점을 찾는 것이 핵심입니다.`,short:'이 에리어는 모집량이 부족한 코마가 많아, 낙찰 확률을 90%로 잡아도 상한가가 최적이었습니다. 부족 시장에서는 싸게 내도 더 붙지 않고 단가만 버립니다. 반대로 부족이 드문 블록에서는 확률과 단가의 균형을 찾는 것이 승부입니다.',gen:'스포트 차익과 조정력은 같은 용량을 두고 경쟁합니다. 블록마다 「조정력 기대 수입」과 「충방전 가격 차」를 비교해 더 큰 쪽에 쓰는 것이 기본입니다.'}}},
 ja:{tab:['家庭用蓄電池','系統用BESS'],title:'系統用BESS入札',desc:'2 MW / 8 MWhの系統用蓄電池を前日入札で運用します。実際のEPRX需給調整市場の約定実績（2026年4〜10月）で落札の可否が決まります。日付は結果が出るまで非公開です。',
  area:'エリア',start:'新しい日の入札を開始',
- how:['一日を<b>3時間ブロック8つ</b>に分けて用途を決めます：一次調整力、三次①、スポット充電、スポット放電、待機。','調整力は<b>入札価格</b>を選びます。保守・中間・攻め＝過去4週同じ時間帯の最高落札価格の30・60・90%分位。<b>出した価格で精算</b>（マルチプライス）なので、安く出せば落ちても稼ぎが減り、高く出せば落ちます。','一次はブロック開始時の残量が<b>1〜7 MWh</b>の範囲、三次①は<b>発動</b>されたら1〜3時間2 MWで放電が必要。守れなければペナルティ。','結果は同じ過去分布で入札した<b>予報AI</b>と比べます。'],
+ how:['一日を<b>3時間ブロック8つ</b>に分けて用途を決めます：一次調整力、三次①、スポット充電、スポット放電、待機。','調整力は<b>入札価格</b>を選びます。保守・中間・攻め＝過去4週で<b>落札確率90%・60%・30%</b>になる価格（上限が変わった期間は上限比で換算）。<b>出した価格で精算</b>（マルチプライス）なので、安く出せば落ちても稼ぎが減り、高く出せば落ちます。募集量不足が多いブロックは3つの価格が同じになり<b>上限価格入札</b>1つにまとめて表示します。','一次はブロック開始時の残量が<b>1〜7 MWh</b>の範囲、三次①は<b>発動</b>されたら1〜3時間2 MWで放電が必要。守れなければペナルティ。','結果は同じ過去分布で入札した<b>予報AI</b>と比べます。'],
  spec:[['設備','2 MW / 8 MWh'],['効率','充電95% · 放電95%'],['残量','開始・終了 4 MWh'],['上限価格','4〜8月 15円、9月〜 10円 /ΔkW·30分（三次①は仮定値）'],['データ','EPRX実績 · スポットはモデル']],
  hdr:(a,s)=>`前日入札 · ${a}エリア · ${s} · 日付非公開`,season:{spring:'春',summer:'夏',autumn:'秋'},
  opt:{p1:'一次調整力',t1:'三次①',chg:'スポット充電',dis:'スポット放電',idle:'待機'},st:['保守','中間','攻め'],
  pk:'ピーク裁定',anc:'調整力中心',clr:'リセット',submit:'入札確定',exp:v=>`期待収益 ${v}`,lobby:'ロビーへ',
- axSpot:'スポット 円/kWh（モデル）',axAnc:'最高落札価格の分布 円/ΔkW·30分（過去4週、10〜90%）',axSoc:'残量 MWh',
+ axSpot:'スポット 円/kWh（モデル）',axAnc:'最高落札価格の分布 円/ΔkW·30分（不足除く・上限換算）· %=不足確率',capBid:(v,p)=>`上限 ${v}円 · 不足 ${p}%`,pw:p=>`${p}%`,axSoc:'残量 MWh',
  won:(w,v)=>`落札 ${w}/6 · ${v}`,lost:'不落',chg:(e,v)=>`充電 ${e} MWh · ${v}`,dis:(e,v)=>`放電 ${e} MWh · ${v}`,act:h=>`発動 ${h}h ✓`,actFail:'発動未達 ✕',band:'残量範囲外 ✕',idle:'待機',
  res:{title:'入札精算',mis:'ミッション',end:'終了残量の補充',reveal:(d,a)=>`この日は ${d} · ${a}エリアでした`,item:'項目',me:'自分',mpc:'予報AI',ai:'完璧AI',p1:'一次 ΔkW',t1:'三次① ΔkW',kwh:'三次 発動kWh',spot:'スポット裁定',pen:'ペナルティ',tot:'合計',
   eff:'予報AI比',m1:'ペナルティゼロ',m2:'予報AIの90%以上',m3:'入札したコマの落札率70%以上',again:'同じ日をもう一度',next:'新しい日',lobby:'ロビー',lesson:'解説',plan:'ブロック配置',
-  L:{pen:'約束を守れませんでした。調整力に落札したら、その時間に約束した出力を出せる残量が必要です。三次①を続けて出す前には充電ブロックを、一次の前には残量を1〜7 MWhに合わせておきましょう。',lostAgg:n=>`攻めの入札${n}ブロックがほぼ不落でした。過去分布の上端（90%）は落札確率が低め。落札確率×価格が最大になる点を探すのが鍵です。`,short:'このエリアは一次の募集量が不足するコマが多く、上限近くでも落札される日が多いです。保守入札はその分の単価を捨てています。',gen:'スポット裁定と調整力は同じ容量を取り合います。ブロックごとに「調整力の期待収入」と「充放電の価格差」を比べ、大きい方に使うのが基本です。'}}}
+  L:{pen:'約束を守れませんでした。調整力に落札したら、その時間に約束した出力を出せる残量が必要です。三次①を続けて出す前には充電ブロックを、一次の前には残量を1〜7 MWhに合わせておきましょう。',lostAgg:n=>`攻めの入札${n}ブロックがほぼ不落でした。過去分布の上端（90%）は落札確率が低め。落札確率×価格が最大になる点を探すのが鍵です。`,short:'このエリアは募集量不足のコマが多く、落札確率90%を狙っても上限価格が最適でした。不足市場では安く出しても落札は増えず、単価を捨てるだけ。逆に不足が少ないブロックでは確率と単価のバランスが勝負です。',gen:'スポット裁定と調整力は同じ容量を取り合います。ブロックごとに「調整力の期待収入」と「充放電の価格差」を比べ、大きい方に使うのが基本です。'}}}
 };
 let bMode='home',bArea=4,BB=null;
 const bDate=di=>{const d=new Date(Date.UTC(2026,3,1)+di*864e5);return d.toISOString().slice(0,10);};
@@ -722,7 +722,8 @@ const bMonth=di=>new Date(Date.UTC(2026,3,1)+di*864e5).getUTCMonth()+1;
 const bCap=(p,di)=>bMonth(di)<=8?15:10; // t1 cap: assumed same as p1 (game value)
 const bVal=(p,ai,k)=>BD[p][ai][k];
 function bWin(p,ai,k,bid,cap){const v=bVal(p,ai,k);if(v===-1)return bid<=cap;if(!v)return false;return bid*10<=v+1e-9;}
-function bHist(p,ai,di,b,cap){const a=[];for(let d=di-28;d<di;d++)for(let j=0;j<6;j++){const v=bVal(p,ai,d*48+b*6+j);a.push(v===-1?cap:v/10);}return a.sort((x,y)=>x-y);}
+function bHist(p,ai,di,b){let sh=0,tot=0;const r=[];for(let d=di-28;d<di;d++){const c=bCap(p,d);for(let j=0;j<6;j++){const v=bVal(p,ai,d*48+b*6+j);tot++;if(v===-1)sh++;else r.push(v>0?v/10/c:0);}}return {r:r.sort((x,y)=>x-y),sh,tot};}
+const BT_TARGET=[.9,.6,.3];
 const qtl=(a,q)=>a[Math.min(a.length-1,Math.max(0,Math.floor(q*(a.length-1))))];
 function bSetup(di,ai){
   const m=bMonth(di),season=m>=6&&m<=9?'summer':m>=10?'autumn':'spring',r=rng(di*97+ai*13+7);
@@ -731,8 +732,11 @@ function bSetup(di,ai){
   const spot=[...Array(8)].map((_,b)=>(hour[b*3]+hour[b*3+1]+hour[b*3+2])/3);
   const act=[...Array(8)].map(()=>r()<BS.act?1+Math.floor(r()*3):0);
   const drift=[...Array(8)].map(()=>-.15-r()*.35);
-  const P={};['p1','t1'].forEach(p=>{const cap=bCap(p,di);P[p]=[...Array(8)].map((_,b)=>{const h=bHist(p,ai,di,b,cap);const bids=BQ.map(q=>Math.min(cap,Math.max(.1,Math.round(qtl(h,q)*10)/10)));
-    const pw=bids.map(bid=>h.filter(v=>v>=bid).length/h.length);return {h,bids,pw,q10:qtl(h,.1),q50:qtl(h,.5),q90:qtl(h,.9),cap};});});
+  const P={};['p1','t1'].forEach(p=>{const cap=bCap(p,di);P[p]=[...Array(8)].map((_,b)=>{const H=bHist(p,ai,di,b);
+    const pwX=x=>(H.sh+H.r.filter(v=>v>=x-1e-9).length)/H.tot; // x = bid / cap
+    const bids=BT_TARGET.map(t=>{let best=.01;for(let x=.01;x<=1.0001;x+=.01)if(pwX(x)>=t)best=x;return Math.max(.1,Math.round(Math.min(1,best)*cap*10)/10);});
+    const pw=bids.map(v=>pwX(v/cap));const ns=H.r.length?H.r:[1];
+    return {bids,pw,ps:H.sh/H.tot,merged:bids[0]===bids[2],q10:qtl(ns,.1)*cap,q50:qtl(ns,.5)*cap,q90:qtl(ns,.9)*cap,cap};});});
   return {di,ai,season,hour,spot,act,drift,P,area:BD.areas[ai]};
 }
 // one block on actual outcomes
@@ -794,10 +798,10 @@ function bRender(){
     const anc=x.o==='p1'||x.o==='t1';
     c.innerHTML=`<div class="bt mono">${String(b*3).padStart(2,'0')}–${String(b*3+3).padStart(2,'0')}</div>
       <select id="bo-${b}" aria-label="use">${BOPT.map(o=>`<option value="${o}"${o===x.o?' selected':''}>${t.opt[o]}</option>`).join('')}</select>
-      <select id="bs-${b}" aria-label="bid"${anc?'':' disabled'}>${anc?D.P[x.o][b].bids.map((v,i)=>`<option value="${i}"${i===x.st?' selected':''}>${t.st[i]} ${v.toFixed(1)}円 · ${Math.round(D.P[x.o][b].pw[i]*100)}%</option>`).join(''):`<option>—</option>`}</select>
+      <select id="bs-${b}" aria-label="bid"${anc?'':' disabled'}>${anc?(D.P[x.o][b].merged?`<option value="0" selected>${t.capBid(D.P[x.o][b].bids[0].toFixed(1),Math.round(D.P[x.o][b].ps*100))}</option>`:D.P[x.o][b].bids.map((v,i)=>`<option value="${i}"${i===x.st?' selected':''}>${t.st[i]} ${v.toFixed(1)}円 ${t.pw(Math.round(D.P[x.o][b].pw[i]*100))}</option>`).join('')):`<option>—</option>`}</select>
       <div class="bres" id="br-${b}"></div>`;
     box.appendChild(c);
-    c.querySelector('#bo-'+b).onchange=e=>{if(BB.phase!=='bid')return;x.o=e.target.value;bRender();};
+    c.querySelector('#bo-'+b).onchange=e=>{if(BB.phase!=='bid')return;x.o=e.target.value;if((x.o==='p1'||x.o==='t1')&&D.P[x.o][b].merged)x.st=0;bRender();};
     c.querySelector('#bs-'+b).onchange=e=>{if(BB.phase!=='bid')return;x.st=+e.target.value;bRender();};
   });
   if(BB.phase==='bid')$('b-exp').textContent=t.exp(man(bExpected(D,BB.plan)));
@@ -813,10 +817,11 @@ function bDraw(){
   D.spot.forEach((v,b)=>{h+=`<rect x="${L0+b*BW+4}" y="${sy(v)}" width="${BW-8}" height="${84-sy(v)}" fill="#7FA2FF" opacity=".22" rx="2"/>`;});
   h+=`<path d="${D.hour.map((v,i)=>(i?'L':'M')+(L0+(i+.5)*W/24)+' '+sy(v)).join('')}" fill="none" stroke="#7FA2FF" stroke-width="2"/>`;
   // ancillary distributions
-  const amx=Math.max(D.P.p1[0].cap,...D.P.t1.map(p=>p.q90))*1.05,ay=v=>184-Math.min(v,amx)/amx*76;
+  const amx=D.P.p1[0].cap*1.05,ay=v=>184-Math.min(v,amx)/amx*70;
   h+=`<text x="${L0+4}" y="104" fill="#8FA8B3" font-size="11">${t.axAnc}</text><text x="${L0-4}" y="${ay(amx/1.05)+4}" fill="#8FA8B3" font-size="11" text-anchor="end" ${mono}>${Math.round(amx/1.05)}</text><text x="${L0-4}" y="188" fill="#8FA8B3" font-size="11" text-anchor="end" ${mono}>0</text>`;
   ['p1','t1'].forEach((p,pi)=>D.P[p].forEach((pp,b)=>{const x=L0+b*BW+8+pi*(BW-16)/2,w=(BW-16)/2-4;
     h+=`<line x1="${x+w/2}" x2="${x+w/2}" y1="${ay(pp.q90)}" y2="${ay(pp.q10)}" stroke="${BCOL[p]}" stroke-opacity=".7"/><rect x="${x}" y="${ay(Math.max(pp.q50,pp.q10))-3}" width="${w}" height="6" rx="2" fill="${BCOL[p]}" opacity=".85"/>`;
+    if(pp.ps>=.05)h+=`<text x="${x+w/2}" y="${ay(amx/1.05)-4}" fill="${BCOL[p]}" font-size="9.5" text-anchor="middle" ${mono}>${Math.round(pp.ps*100)}%</text>`;
     const x0=BB.plan[b];if(x0.o===p)h+=`<path d="M${x+w/2} ${ay(pp.bids[x0.st])-6}l6 6l-6 6l-6-6z" fill="#F5B841" stroke="#0A1820"/>`;
     if(BB.phase!=='bid'){const vs=[];for(let j=0;j<6;j++){const v=bVal(p,D.ai,D.di*48+b*6+j);vs.push(v===-1?pp.cap:v/10);}vs.forEach((v,j)=>h+=`<circle cx="${x+2+j*(w-4)/5}" cy="${ay(v)}" r="2.2" fill="#E8F1F4"/>`);}
   }));
@@ -859,7 +864,8 @@ function bFinish(){
   const aggLost=me.res.filter(r=>(r.o==='p1'||r.o==='t1')&&r.st===2&&r.w<=2).length;
   const shortRate=(()=>{let n=0,c=0;for(let k=(D.di-28)*48;k<D.di*48;k++){n++;if(bVal('p1',D.ai,k)===-1)c++;}return c/n;})();
   const consP1=me.res.filter(r=>r.o==='p1'&&r.st===0).length;
-  const lesson=pen?t.L.pen:aggLost>=2?t.L.lostAgg(aggLost):(shortRate>.5&&consP1>=2)?t.L.short:t.L.gen;
+  const mergedUsed=BB.plan.filter((x,b)=>(x.o==='p1'||x.o==='t1')&&D.P[x.o][b].merged).length;
+  const lesson=pen?t.L.pen:aggLost>=2?t.L.lostAgg(aggLost):(mergedUsed>=2||(shortRate>.5&&consP1>=2))?t.L.short:t.L.gen;
   const rows=[['p1','p1'],['t1','t1'],['kwh','kwh'],['spot','spot'],['pen','pen'],['end','end']].map(([k,l])=>`<tr><td>${t[l]}</td><td>${man(me.parts[k])}</td><td>${man(mp.parts[k])}</td><td>${man(ai.parts[k])}</td></tr>`).join('')+`<tr class="me"><td>${t.tot}</td><td>${man(me.tot)}</td><td>${man(mp.tot)}</td><td>${man(ai.tot)}</td></tr>`;
   const strip=(lab,plan)=>`<div style="display:grid;grid-template-columns:64px repeat(8,1fr);gap:3px;align-items:center"><span style="font-size:12px;color:var(--muted)">${lab}</span>${plan.map(x=>`<span title="${BT[lang].opt[x.o]}" style="height:16px;border-radius:3px;background:${BCOL[x.o]};opacity:${x.o==='p1'||x.o==='t1'?(.55+x.st*.2):1}"></span>`).join('')}</div>`;
   const legend=BOPT.map(o=>`<span style="display:inline-flex;align-items:center;gap:5px;margin-right:12px;font-size:12px;color:var(--muted)"><i style="width:10px;height:10px;border-radius:2px;background:${BCOL[o]};display:inline-block"></i>${BT[lang].opt[o]}</span>`).join('');
