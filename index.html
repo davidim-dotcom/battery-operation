@@ -695,25 +695,25 @@ const AREA={ko:{'東京':'도쿄','関西':'간사이','中部':'주부','東北
 const BT={
 ko:{tab:['가정용 축전지','계통용 BESS'],title:'계통용 BESS 입찰',desc:'2 MW / 8 MWh 계통용 축전지를 전날 입찰로 운용합니다. 실제 EPRX 수급조정시장 낙찰 실적(2026년 4~10월)으로 낙찰 여부가 갈립니다. 날짜는 결과가 나올 때까지 비공개입니다.',
  area:'에리어',start:'새 날 입찰 시작',
- how:['하루를 <b>3시간 블록 8개</b>로 나눠 용도를 정합니다: 1차 조정력, 3차①, 스포트 충전, 스포트 방전, 대기.','조정력은 <b>입찰가</b>를 고릅니다. 보수·중간·공격 = 과거 4주 기준 <b>낙찰 확률 90%·60%·30%</b>가 되는 가격입니다(상한이 바뀐 기간은 상한 대비 비율로 환산). <b>낸 가격 그대로 정산</b>(pay-as-bid)되므로 싸게 내면 붙어도 덜 벌고, 비싸게 내면 떨어집니다. 모집량 부족이 잦은 블록은 세 가격이 같아져 <b>상한가 입찰</b> 하나로 표시됩니다.','1차는 블록 시작 잔량이 <b>1~7 MWh</b> 안이어야 하고, 3차①은 <b>발동</b>되면 1~3시간 2 MW로 방전해야 합니다. 못 지키면 페널티입니다.','결과는 같은 과거 분포로 입찰한 <b>예보 AI</b>와 비교합니다.'],
+ how:['하루를 <b>3시간 블록 8개</b>로 나눠 용도를 정합니다: 1차 조정력, 3차①, 스포트 충전, 스포트 방전, 대기.','조정력은 <b>입찰가</b>를 고릅니다. 보수·중간·공격 = 과거 4주 기준 <b>낙찰 확률 90%·60%·30%</b>가 되는 가격입니다(상한이 바뀐 기간은 상한 대비 비율로 환산). <b>낸 가격 그대로 정산</b>(pay-as-bid)되므로 싸게 내면 붙어도 덜 벌고, 비싸게 내면 떨어집니다. 모집량 부족이 잦은 블록은 세 가격이 같아져 <b>상한가 입찰</b> 하나로 표시됩니다.','1차는 블록 시작 잔량이 <b>1~7 MWh</b> 안이어야 하고, 3차①은 <b>발동</b>되면 1~3시간(낙찰한 코마 시간 안에서) 2 MW로 방전해야 합니다. 2시간이면 4.2 MWh, 3시간이면 6.3 MWh가 필요하니 앞 블록에서 충전해 두세요. 모자라면 모자란 비율만큼 페널티입니다.','결과는 같은 과거 분포로 입찰한 <b>예보 AI</b>와 비교합니다.'],
  spec:[['설비','2 MW / 8 MWh'],['효율','충전 95% · 방전 95%'],['잔량','시작·종료 4 MWh'],['상한가','4~8월 15円, 9월~ 10円 /ΔkW·30분 (3차①은 가정값)'],['데이터','EPRX 실적 · 스포트는 모델']],
  hdr:(a,s)=>`D-1 입찰 · ${a} 에리어 · ${s} · 날짜 비공개`,season:{spring:'봄',summer:'여름',autumn:'가을'},
  opt:{p1:'1차 조정력',t1:'3차①',chg:'스포트 충전',dis:'스포트 방전',idle:'대기'},st:['보수','중간','공격'],
  pk:'피크 차익',anc:'조정력 중심',clr:'초기화',submit:'입찰 확정',exp:v=>`기대 수익 ${v}`,lobby:'로비로',
  axSpot:'스포트 円/kWh (모델)',axAnc:'최고 낙찰가 분포 円/ΔkW·30분 (부족 제외·상한 환산) · %=부족 확률',capBid:(v,p)=>`상한가 ${v}円 · 부족 ${p}%`,pw:p=>`${p}%`,axSoc:'잔량 MWh',
- won:(w,v)=>`낙찰 ${w}/6 · ${v}`,lost:'탈락',chg:(e,v)=>`충전 ${e} MWh · ${v}`,dis:(e,v)=>`방전 ${e} MWh · ${v}`,act:h=>`발동 ${h}h ✓`,actFail:'발동 미달 ✕',band:'잔량 범위 이탈 ✕',idle:'대기',
+ won:(w,v)=>`낙찰 ${w}/6 · ${v}`,lost:'탈락',chg:(e,v)=>`충전 ${e} MWh · ${v}`,dis:(e,v)=>`방전 ${e} MWh · ${v}`,act:h=>`발동 ${h}h ✓`,actFail:p=>`발동 미달 ${p}% ✕`,band:'잔량 범위 이탈 ✕',idle:'대기',
  res:{title:'입찰 정산',mis:'미션',end:'종료 잔량 보충',reveal:(d,a)=>`이 날은 ${d} · ${a} 에리어였습니다`,item:'항목',me:'나',mpc:'예보 AI',ai:'완벽 AI',p1:'1차 ΔkW',t1:'3차① ΔkW',kwh:'3차 발동 kWh',spot:'스포트 차익',pen:'페널티',tot:'합계',
   eff:'예보 AI 대비',m1:'페널티 0',m2:'예보 AI의 90% 이상',m3:'입찰한 코마 낙찰률 70% 이상',again:'같은 날 다시',next:'새 날',lobby:'로비',lesson:'해설',plan:'블록 배치',
   L:{pen:'약속을 못 지켰습니다. 조정력에 낙찰되면 그 시간에는 약속한 출력을 낼 잔량이 있어야 합니다. 3차①을 연속으로 내기 전에는 충전 블록을, 1차 전에는 잔량을 1~7 MWh 안으로 맞춰 두세요.',lostAgg:n=>`공격 입찰 ${n}블록이 대부분 탈락했습니다. 과거 분포에서 상단(90%)은 붙을 확률이 낮습니다. 낙찰 확률 × 가격이 가장 큰 지점을 찾는 것이 핵심입니다.`,short:'이 에리어는 모집량이 부족한 코마가 많아, 낙찰 확률을 90%로 잡아도 상한가가 최적이었습니다. 부족 시장에서는 싸게 내도 더 붙지 않고 단가만 버립니다. 반대로 부족이 드문 블록에서는 확률과 단가의 균형을 찾는 것이 승부입니다.',gen:'스포트 차익과 조정력은 같은 용량을 두고 경쟁합니다. 블록마다 「조정력 기대 수입」과 「충방전 가격 차」를 비교해 더 큰 쪽에 쓰는 것이 기본입니다.'}}},
 ja:{tab:['家庭用蓄電池','系統用BESS'],title:'系統用BESS入札',desc:'2 MW / 8 MWhの系統用蓄電池を前日入札で運用します。実際のEPRX需給調整市場の約定実績（2026年4〜10月）で落札の可否が決まります。日付は結果が出るまで非公開です。',
  area:'エリア',start:'新しい日の入札を開始',
- how:['一日を<b>3時間ブロック8つ</b>に分けて用途を決めます：一次調整力、三次①、スポット充電、スポット放電、待機。','調整力は<b>入札価格</b>を選びます。保守・中間・攻め＝過去4週で<b>落札確率90%・60%・30%</b>になる価格（上限が変わった期間は上限比で換算）。<b>出した価格で精算</b>（マルチプライス）なので、安く出せば落ちても稼ぎが減り、高く出せば落ちます。募集量不足が多いブロックは3つの価格が同じになり<b>上限価格入札</b>1つにまとめて表示します。','一次はブロック開始時の残量が<b>1〜7 MWh</b>の範囲、三次①は<b>発動</b>されたら1〜3時間2 MWで放電が必要。守れなければペナルティ。','結果は同じ過去分布で入札した<b>予報AI</b>と比べます。'],
+ how:['一日を<b>3時間ブロック8つ</b>に分けて用途を決めます：一次調整力、三次①、スポット充電、スポット放電、待機。','調整力は<b>入札価格</b>を選びます。保守・中間・攻め＝過去4週で<b>落札確率90%・60%・30%</b>になる価格（上限が変わった期間は上限比で換算）。<b>出した価格で精算</b>（マルチプライス）なので、安く出せば落ちても稼ぎが減り、高く出せば落ちます。募集量不足が多いブロックは3つの価格が同じになり<b>上限価格入札</b>1つにまとめて表示します。','一次はブロック開始時の残量が<b>1〜7 MWh</b>の範囲、三次①は<b>発動</b>されたら1〜3時間（落札したコマの範囲で）2 MWで放電が必要。2時間なら4.2 MWh、3時間なら6.3 MWhが要るので前のブロックで充電を。足りなければ不足分の割合だけペナルティ。','結果は同じ過去分布で入札した<b>予報AI</b>と比べます。'],
  spec:[['設備','2 MW / 8 MWh'],['効率','充電95% · 放電95%'],['残量','開始・終了 4 MWh'],['上限価格','4〜8月 15円、9月〜 10円 /ΔkW·30分（三次①は仮定値）'],['データ','EPRX実績 · スポットはモデル']],
  hdr:(a,s)=>`前日入札 · ${a}エリア · ${s} · 日付非公開`,season:{spring:'春',summer:'夏',autumn:'秋'},
  opt:{p1:'一次調整力',t1:'三次①',chg:'スポット充電',dis:'スポット放電',idle:'待機'},st:['保守','中間','攻め'],
  pk:'ピーク裁定',anc:'調整力中心',clr:'リセット',submit:'入札確定',exp:v=>`期待収益 ${v}`,lobby:'ロビーへ',
  axSpot:'スポット 円/kWh（モデル）',axAnc:'最高落札価格の分布 円/ΔkW·30分（不足除く・上限換算）· %=不足確率',capBid:(v,p)=>`上限 ${v}円 · 不足 ${p}%`,pw:p=>`${p}%`,axSoc:'残量 MWh',
- won:(w,v)=>`落札 ${w}/6 · ${v}`,lost:'不落',chg:(e,v)=>`充電 ${e} MWh · ${v}`,dis:(e,v)=>`放電 ${e} MWh · ${v}`,act:h=>`発動 ${h}h ✓`,actFail:'発動未達 ✕',band:'残量範囲外 ✕',idle:'待機',
+ won:(w,v)=>`落札 ${w}/6 · ${v}`,lost:'不落',chg:(e,v)=>`充電 ${e} MWh · ${v}`,dis:(e,v)=>`放電 ${e} MWh · ${v}`,act:h=>`発動 ${h}h ✓`,actFail:p=>`発動未達 ${p}% ✕`,band:'残量範囲外 ✕',idle:'待機',
  res:{title:'入札精算',mis:'ミッション',end:'終了残量の補充',reveal:(d,a)=>`この日は ${d} · ${a}エリアでした`,item:'項目',me:'自分',mpc:'予報AI',ai:'完璧AI',p1:'一次 ΔkW',t1:'三次① ΔkW',kwh:'三次 発動kWh',spot:'スポット裁定',pen:'ペナルティ',tot:'合計',
   eff:'予報AI比',m1:'ペナルティゼロ',m2:'予報AIの90%以上',m3:'入札したコマの落札率70%以上',again:'同じ日をもう一度',next:'新しい日',lobby:'ロビー',lesson:'解説',plan:'ブロック配置',
   L:{pen:'約束を守れませんでした。調整力に落札したら、その時間に約束した出力を出せる残量が必要です。三次①を続けて出す前には充電ブロックを、一次の前には残量を1〜7 MWhに合わせておきましょう。',lostAgg:n=>`攻めの入札${n}ブロックがほぼ不落でした。過去分布の上端（90%）は落札確率が低め。落札確率×価格が最大になる点を探すのが鍵です。`,short:'このエリアは募集量不足のコマが多く、落札確率90%を狙っても上限価格が最適でした。不足市場では安く出しても落札は増えず、単価を捨てるだけ。逆に不足が少ないブロックでは確率と単価のバランスが勝負です。',gen:'スポット裁定と調整力は同じ容量を取り合います。ブロックごとに「調整力の期待収入」と「充放電の価格差」を比べ、大きい方に使うのが基本です。'}}}
@@ -749,8 +749,8 @@ function bBlock(D,b,o,st,s,known){
     for(let j=0;j<6;j++)if(bWin(o,D.ai,D.di*48+b*6+j,r.bid,pp.cap))r.w++;
     r.dkw=r.bid*BS.pw*1000*r.w;
     if(o==='p1'&&r.w){if(s<BS.lo||s>BS.hi){r.band=true;r.pen=-1.5*r.dkw;}else s=Math.max(0,Math.min(BS.cap,s+D.drift[b]*r.w/6));}
-    if(o==='t1'&&r.w&&D.act[b]){const need=BS.pw*D.act[b];r.actH=D.act[b];
-      if(s*BS.eta>=need-1e-9){s-=need/BS.eta;r.kwh=need*1000*D.spot[b];}else{r.fail=true;r.kwh=s*BS.eta*1000*D.spot[b];s=0;r.pen=-1.5*r.dkw;}}
+    if(o==='t1'&&r.w&&D.act[b]){const hrs=Math.min(D.act[b],r.w/2),need=BS.pw*hrs,have=s*BS.eta;r.actH=hrs;
+      if(have>=need-1e-9){s-=need/BS.eta;r.kwh=need*1000*D.spot[b];}else{r.fail=true;r.short=(need-have)/need;r.kwh=have*1000*D.spot[b];s=0;r.pen=-1.5*r.dkw*r.short;}}
   }else if(o==='chg'){const e=Math.min(BS.pw*3,(BS.cap-s)/BS.eta);s+=e*BS.eta;r.e=e;r.spot=-e*1000*D.spot[b];}
   else if(o==='dis'){const e=Math.min(BS.pw*3,s*BS.eta);s-=e/BS.eta;r.e=e;r.spot=e*1000*D.spot[b];}
   r.s=s;r.net=r.dkw+r.kwh+r.spot+r.pen;return r;
@@ -769,7 +769,7 @@ function bPlan(D,mode){
         if(mode==='perfect'||a.o==='chg'||a.o==='dis'||a.o==='idle'){const r=bBlock(D,b,a.o,a.st,s);v=r.net+vAt(r.s);}
         else{const pp=D.P[a.o][b],bid=pp.bids[a.st],pw=pp.pw[a.st],dkw=bid*BS.pw*1000*6*pw;
           if(a.o==='p1'){if(s<BS.lo||s>BS.hi)v=-0.5*dkw*0+(-1.5*dkw)*1+vAt(s);else v=dkw+vAt(s-.25*pw);}
-          else{v=(1-BS.act*pw)*(dkw+vAt(s));[1,2,3].forEach(h=>{const need=BS.pw*h,pr=BS.act*pw/3;if(s*BS.eta>=need)v+=pr*(dkw+need*1000*D.spot[b]+vAt(s-need/BS.eta));else v+=pr*(-.5*dkw+s*BS.eta*1000*D.spot[b]+vAt(0));});}}
+          else{v=(1-BS.act*pw)*(dkw+vAt(s));[1,2,3].forEach(h=>{const need=BS.pw*h,pr=BS.act*pw/3;if(s*BS.eta>=need)v+=pr*(dkw+need*1000*D.spot[b]+vAt(s-need/BS.eta));else{const sh=(need-s*BS.eta)/need;v+=pr*(dkw*(1-1.5*sh)+s*BS.eta*1000*D.spot[b]+vAt(0));}});}}
         if(v>best+1e-6){best=v;ba=a;}});
       nV[k]=best;nP[k]=ba;}
     V=nV;pol[b]=nP;}
@@ -777,8 +777,12 @@ function bPlan(D,mode){
     if(mode==='perfect')s=bBlock(D,b,a.o,a.st,s).s;else{const r=bBlock(D,b,a.o,a.st,s);s=r.s;}}
   return plan;
 }
+// expected activation of 3차①: 35% × 1~3h, deliver what is in the battery, proportional penalty — returns extra value and expected SOC after
+function t1Exp(D,b,st,s){const pp=D.P.t1[b],pw=pp.pw[st],dkw=pp.bids[st]*BS.pw*1000*6*pw;let v=0,drain=0;
+  [1,2,3].forEach(h=>{const need=BS.pw*h,have=s*BS.eta,pr=BS.act*pw/3;if(have>=need){v+=pr*need*1000*D.spot[b];drain+=pr*need/BS.eta;}else{v+=pr*(have*1000*D.spot[b]-1.5*dkw*(need-have)/need);drain+=pr*s;}});
+  return {v,s:Math.max(0,s-drain)};}
 function bExpected(D,plan){ // expected value shown while planning (past distribution)
-  let s=BS.s0,v=0;plan.forEach((x,b)=>{if(x.o==='p1'||x.o==='t1'){const pp=D.P[x.o][b];v+=pp.bids[x.st]*BS.pw*1000*6*pp.pw[x.st];if(x.o==='p1'&&(s<BS.lo||s>BS.hi))v-=pp.bids[x.st]*BS.pw*1000*6*pp.pw[x.st]*1.5;}
+  let s=BS.s0,v=0;plan.forEach((x,b)=>{if(x.o==='p1'||x.o==='t1'){const pp=D.P[x.o][b];v+=pp.bids[x.st]*BS.pw*1000*6*pp.pw[x.st];if(x.o==='p1'&&(s<BS.lo||s>BS.hi))v-=pp.bids[x.st]*BS.pw*1000*6*pp.pw[x.st]*1.5;if(x.o==='t1'){const e=t1Exp(D,b,x.st,s);v+=e.v;s=e.s;}}
     else{const r=bBlock(D,b,x.o,x.st,s);v+=r.net;s=r.s;}if(x.o==='p1')s=Math.max(0,s-.25);});
   v-=Math.max(0,BS.s0-s)/BS.eta*1000*D.hour.reduce((a,b)=>a+b,0)/24;return v;}
 
@@ -790,7 +794,7 @@ function bStart(di){
   document.body.classList.add('playing');$('lobby').hidden=true;$('play').hidden=true;$('bess').hidden=false;$('modal').hidden=true;window.scrollTo(0,0);
   bRender();beep(660,.12);
 }
-function bSim(plan){let s=BS.s0;return plan.map((x,b)=>{if(x.o==='p1')s=Math.max(0,s-.25);else if(x.o!=='t1')s=bBlock(BB.D,b,x.o,x.st,s).s;return s;});}
+function bSim(plan){let s=BS.s0;return plan.map((x,b)=>{if(x.o==='p1')s=Math.max(0,s-.25);else if(x.o==='t1')s=t1Exp(BB.D,b,x.st,s).s;else s=bBlock(BB.D,b,x.o,x.st,s).s;return s;});}
 function bRender(){
   const t=BT[lang],D=BB.D;
   $('b-hdr').textContent=t.hdr(AREA[lang][D.area],t.season[D.season]);$('b-quit').textContent=t.lobby;
@@ -851,7 +855,7 @@ function bSubmit(){
   const t=BT[lang];
   const tick=()=>{const b=BB.shown;if(b>=8){setTimeout(bFinish,600);return;}
     const r=BB.run.res[b],el=$('br-'+b),c=$('bc-'+b);let txt='',ok=true;
-    if(r.o==='p1'||r.o==='t1'){if(r.w){txt=t.won(r.w,man(r.dkw));if(r.band){txt+=' · '+t.band;ok=false;}if(r.actH)txt+=' · '+(r.fail?t.actFail:t.act(r.actH));if(r.fail)ok=false;}else{txt=t.lost;ok=false;}}
+    if(r.o==='p1'||r.o==='t1'){if(r.w){txt=t.won(r.w,man(r.dkw));if(r.band){txt+=' · '+t.band;ok=false;}if(r.actH)txt+=' · '+(r.fail?t.actFail(Math.round(r.short*100)):t.act(r.actH));if(r.fail)ok=false;}else{txt=t.lost;ok=false;}}
     else if(r.o==='chg')txt=t.chg(r.e.toFixed(1),man(r.spot));else if(r.o==='dis')txt=t.dis(r.e.toFixed(1),man(r.spot));else txt=t.idle;
     el.textContent=txt;c.classList.add('flip',ok?'ok':'ng');beep(ok?(r.w?880:600):220,.1,ok?'triangle':'sawtooth',.04);
     BB.shown++;bDraw();setTimeout(tick,520);};
